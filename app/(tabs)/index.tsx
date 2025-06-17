@@ -1,7 +1,6 @@
 import { icons } from '@/constants/icons';
 import { images } from '@/constants/images';
 import { View, Image, ScrollView, ActivityIndicator, FlatList } from 'react-native';
-import Searchbar from '@/components/Searchbar'
 import useFetch from '@/services/useFetch';
 import { fetchMovies } from '@/services/api';
 import { Text } from 'react-native';
@@ -42,7 +41,6 @@ export default function Index() {
           <Text>Erorr: {moviesError}</Text>
         ) : (
           <View className='flex-1 mt-5'>
-            <Searchbar />
             <Text className='text-white text-lg mt-5 mb-3'>Latest Movies</Text>
             <FlatList
               data={movies}
