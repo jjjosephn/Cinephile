@@ -24,3 +24,20 @@ export const fetchMovies = async({query} : {query: string}) => {
    
    return data.results
 } 
+
+export const fetchMovieDetails = async ({movie_id}: {movie_id: number}) => {
+   try {
+      const endpoint = `${TMDB_CONFIG.baseUrl}/movie/${movie_id}?language=en-US`
+
+      const response = await fetch(endpoint, {
+         method: 'GET',
+         headers: TMDB_CONFIG.headers,
+      })
+      const data = await response.json();
+
+      return data;
+   } catch (error) {
+      console.error('Error fetching movie details:', error);
+      throw error;
+   }
+}

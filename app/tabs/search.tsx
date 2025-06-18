@@ -7,6 +7,7 @@ import { fetchMovies } from '@/services/api';
 import { Text } from 'react-native';
 import MovieCard from '@/components/MovieCard';
 import { useEffect, useState } from 'react';
+import { updateSearchCount } from '@/services/appwrite';
 
 export default function Search() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,6 +39,11 @@ export default function Search() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  useEffect(() => {
+    if (movies && movies.length > 0 && searchQuery.trim().length > 1) {
+      updateSearchCount(searchQuery, movies[0]);
+    }
+  }, [movies]);
   return (
     <View className='flex-1 bg-primary'>
       <Image
@@ -96,8 +102,8 @@ export default function Search() {
               )}
 
               {!loadingMovies && !moviesError && searchQuery.trim().length > 0 && Array.isArray(movies) && movies.length > 1 && (
-                <Text className='text-white text-lg mt-5 mb-3'>
-                  Results for <Text className='text-accent'>{searchQuery}</Text>
+                <Text className='text-white text-xl font-bold pb-5'>
+                  Search Results for <Text className='text-accent'>{searchQuery}</Text>
                 </Text>
               )}
             </View>
@@ -108,7 +114,7 @@ export default function Search() {
                 <Text className='text-white text-center mt-10'>
                   Start typing to search for movies...
                 </Text>
-              ) : !loadingMovies && !moviesError && !isTyping && Array.isArray(movies) && movies.length < 1 &&(
+              ) : !loadingMovies && !moviesError && !isTyping && (
                 <Text className='text-white text-center mt-10'>
                   No results found for <Text className='text-accent'>{searchQuery}</Text>
                 </Text>

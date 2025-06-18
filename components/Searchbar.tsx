@@ -1,14 +1,12 @@
 import { StyleSheet, Image, View, TextInput } from 'react-native'
 import React from 'react'
 import { icons } from '@/constants/icons'
-import { useRouter } from 'expo-router';
 
 type SearchbarProps = {
    value: string;
    onChangeText: (text: string) => void;
 }
 const Searchbar = ({ value, onChangeText }: SearchbarProps) => {
-   const router = useRouter();
    return (
       <View className='flex-row items-center bg-dark-200 rounded-full px-5 py-4'>
          <Image 
@@ -19,7 +17,6 @@ const Searchbar = ({ value, onChangeText }: SearchbarProps) => {
             height={15}
          />
          <TextInput 
-            onPress={() => router.push('/search')}
             placeholder='Search'
             value={value}
             onChangeText={onChangeText}

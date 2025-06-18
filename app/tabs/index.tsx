@@ -5,11 +5,22 @@ import useFetch from '@/services/useFetch';
 import { fetchMovies } from '@/services/api';
 import { Text } from 'react-native';
 import MovieCard from '@/components/MovieCard';
+import { getPopularSearches } from '@/services/appwrite';
+import TrendingCard from '@/components/TrendingCard'
 
 export default function Index() {
-  const { data: movies, loading: loadingMovies, error: moviesError } = useFetch(() => fetchMovies({
+  const { data: movies, 
+    loading: loadingMovies, 
+    error: moviesError
+  } = useFetch(() => fetchMovies({
     query: '',
   }))
+
+  const { 
+    data: popularSearches, 
+    loading: loadingPopularSearches, 
+    error: popularSearchesError 
+  } = useFetch(getPopularSearches)
 
   return (
     <View className='flex-1 bg-primary'>
@@ -31,17 +42,41 @@ export default function Index() {
           width={12}
           height={10}
         />
-        {loadingMovies ? (
+        {(loadingMovies || loadingPopularSearches) ? (
           <ActivityIndicator
             size='large'
             color='#0000FF'
             className='mt-10 self-center'
           />
-        ) : moviesError ? (
+        ) : (moviesError || popularSearchesError) ? (
           <Text>Erorr: {moviesError}</Text>
         ) : (
           <View className='flex-1 mt-5'>
-            <Text className='text-white text-lg mt-5 mb-3'>Latest Movies</Text>
+            {popularSearches && (
+              <View>
+                <Text className='text-white text-lg font-bold mb-3'>Popular Movies</Text>
+                <FlatList
+                  data={popularSearches}
+                  renderItem={({ item, index }) => (
+                    <TrendingCard 
+                      {...item}
+                      index={index}
+                    />
+                  )}
+                  keyExtractor={(item) => item.movie_id.toString()}
+                  numColumns={3}
+                  columnWrapperStyle={{
+                    justifyContent: 'flex-start',
+                    gap: 20,
+                    paddingRight: 5,
+                    marginBottom: 10
+                  }}
+                  className='mt-2 '
+                  scrollEnabled={false}
+                />
+              </View>
+            )}
+            <Text className='text-white text-lg font-bold mt-5 mb-3'>Latest Movies</Text>
             <FlatList
               data={movies}
               renderItem={({ item }) => (
