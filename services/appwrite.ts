@@ -1,4 +1,4 @@
-import { Client, Databases, Query, ID } from 'react-native-appwrite';
+import { Client, Databases, Query, ID, Account } from 'react-native-appwrite';
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
@@ -7,9 +7,12 @@ const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!;
 
 const client = new Client()
    .setEndpoint(ENDPOINT)
-   .setProject(PROJECT_ID);
+   .setProject(PROJECT_ID)
+   .setPlatform('com.jjjosephn.cinephile');
 
 const database = new Databases(client)
+
+const account = new Account(client);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
    try{
@@ -48,5 +51,47 @@ export const getPopularSearches = async (): Promise<TrendingMovie[] | undefined>
    } catch (error) {
       console.error(error);
       return undefined;
+   }
+}
+
+export const signIn = async (email: string, password: string) => {
+   try {
+      await account.createEmailPasswordSession(email, password);
+      const user = await account.get();
+      return user;
+   } catch (error) {
+      console.error('Error signing in:', error);
+      throw error;
+   }
+}
+
+export const signUp = async (email: string, password: string, name: string) => {
+   try {
+      await account.create('unique()', email, password, name);
+      const user = await signIn(email, password);
+      return user;
+   } catch (error) {
+      console.error('Error signing up:', error);
+      throw error; 
+   }
+}
+
+export const checkSession = async () => {
+   try {
+      const user = await account.get();
+      return user;
+   } catch (error) {
+      console.error('Error checking session:', error);
+      return null;
+   }
+}
+
+export const getUserInfo = async () => {
+   try {
+      const user = await account.get();
+      return user;
+   } catch (error) {
+      console.error('Error getting user info:', error);
+      return null;
    }
 }

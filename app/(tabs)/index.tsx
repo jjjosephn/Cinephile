@@ -52,7 +52,7 @@ export default function Index() {
           <Text>Erorr: {moviesError}</Text>
         ) : (
           <View className='flex-1 mt-5'>
-            {popularSearches && (
+            {(popularSearches ?? []).length > 0 && (
               <View>
                 <Text className='text-white text-lg font-bold mb-3'>Popular Movies</Text>
                 <FlatList

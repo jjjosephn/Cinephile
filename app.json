@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "com.jjjosephn.cinephile",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.jjjosephn.cinephile",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/logo.png",
         "backgroundColor": "#ffffff"

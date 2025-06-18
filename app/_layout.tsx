@@ -9,10 +9,11 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           gestureEnabled: true,
+          headerShown: false,
         }}
       >
         <Stack.Screen
-          name='tabs'
+          name='(tabs)'
           options={{
             headerShown: false,
           }}
