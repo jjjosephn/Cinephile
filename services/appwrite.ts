@@ -14,6 +14,57 @@ const database = new Databases(client)
 
 const account = new Account(client);
 
+export const signIn = async (email: string, password: string) => {
+   try {
+      await account.createEmailPasswordSession(email, password);
+      const user = await account.get();
+      return user;
+   } catch (error) {
+      console.error('Error signing in:', error);
+      throw error;
+   }
+}
+
+export const signUp = async (email: string, password: string, name: string) => {
+   try {
+      await account.create('unique()', email, password, name);
+      const user = await signIn(email, password);
+      return user;
+   } catch (error) {
+      console.error('Error signing up:', error);
+      throw error; 
+   }
+}
+
+export const checkSession = async () => {
+   try {
+      const user = await account.get();
+      return user;
+   } catch (error) {
+      return null;
+   }
+}
+
+export const getUserInfo = async () => {
+   try {
+      const user = await account.get();
+      return user;
+   } catch (error) {
+      console.error('Error getting user info:', error);
+      return null;
+   }
+}
+
+export const signOut = async () => {
+   try {
+      await account.deleteSession('current');
+      return true;
+   } catch (error) {
+      console.error('Error signing out:', error);
+      return false;
+   }
+}
+
 export const updateSearchCount = async (query: string, movie: Movie) => {
    try{
       const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
@@ -22,7 +73,6 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
 
       if (result.documents.length > 0) {
          const existingMovie = result.documents[0]
-         console.log('Updating search count for:', existingMovie)
 
          await database.updateDocument(DATABASE_ID, COLLECTION_ID, existingMovie.$id, {
             count: existingMovie.count + 1,
@@ -51,47 +101,5 @@ export const getPopularSearches = async (): Promise<TrendingMovie[] | undefined>
    } catch (error) {
       console.error(error);
       return undefined;
-   }
-}
-
-export const signIn = async (email: string, password: string) => {
-   try {
-      await account.createEmailPasswordSession(email, password);
-      const user = await account.get();
-      return user;
-   } catch (error) {
-      console.error('Error signing in:', error);
-      throw error;
-   }
-}
-
-export const signUp = async (email: string, password: string, name: string) => {
-   try {
-      await account.create('unique()', email, password, name);
-      const user = await signIn(email, password);
-      return user;
-   } catch (error) {
-      console.error('Error signing up:', error);
-      throw error; 
-   }
-}
-
-export const checkSession = async () => {
-   try {
-      const user = await account.get();
-      return user;
-   } catch (error) {
-      console.error('Error checking session:', error);
-      return null;
-   }
-}
-
-export const getUserInfo = async () => {
-   try {
-      const user = await account.get();
-      return user;
-   } catch (error) {
-      console.error('Error getting user info:', error);
-      return null;
    }
 }

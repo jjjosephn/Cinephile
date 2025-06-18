@@ -67,7 +67,6 @@ const SignUp = () => {
          Alert.alert('Welcome to Cinephile!', 'Your account has been created successfully.', [
          { text: 'Get Started', onPress: () => {
             router.replace('/(tabs)');
-            console.log('Navigate to home screen');
          }}
          ]);
          
@@ -92,12 +91,10 @@ const SignUp = () => {
 
    const handleSignIn = () => {
       router.replace('/auth/signin');
-      console.log('Navigate to sign in');
    };
 
    const handleBackPress = () => {
       router.replace('/');
-      console.log('Navigate back to home');
    };
 
    return (

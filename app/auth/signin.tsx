@@ -42,13 +42,7 @@ const SignIn = () => {
       setIsLoading(true);
       try {
          await signIn(email.trim(), password);
-         
-         Alert.alert('Success', 'Welcome back!', [
-            { text: 'OK', onPress: () => {
-               router.replace('/(tabs)')
-               console.log('Navigate to home screen');
-            }}
-         ]);
+         router.replace('/(tabs)')
       } catch (error) {
          let errorMessage = 'An error occurred during sign in';
          if (typeof error === 'object' && error !== null && 'message' in error && typeof (error as any).message === 'string') {
@@ -67,13 +61,9 @@ const SignIn = () => {
    const handleBackPress = () => {
       router.replace('/')
    }
-   const handleForgotPassword = () => {
-      console.log('Navigate to forgot password');
-   };
 
    const handleSignUp = () => {
       router.replace('/auth/signup');
-      console.log('Navigate to sign up');
    };
 
    return (
@@ -143,10 +133,6 @@ const SignIn = () => {
                />
                {errors.password ? <Text style={styles.errorText}>{errors.password}</Text> : null}
             </View>
-
-            <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotPasswordContainer}>
-               <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-            </TouchableOpacity>
 
             <TouchableOpacity
                style={[styles.signInButton, isLoading && styles.buttonDisabled]}
